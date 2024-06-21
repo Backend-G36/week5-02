@@ -14,6 +14,10 @@ const course = {
   credits: 3
 }
 
+afterAll(async () => {
+  await student.destroy()
+})
+
 
 test("POST -> 'BASE_URL', should return status code 201, and res.body.name === course.name", async () => {
 
@@ -88,10 +92,11 @@ test("POST -> 'BASE_URL/:id/students', should return statusCode 200, and res.bod
   expect(res.body).toBeDefined()
   expect(res.body).toHaveLength(1)
 
+  expect(res.body[0].studentCourse.studentId).toBeDefined()
   expect(res.body[0].studentCourse.studentId).toBe(student.id)
 
+  expect(res.body[0].studentCourse.courseId).toBeDefined()
   expect(res.body[0].studentCourse.courseId).toBe(courseId)
-
 
 })
 
@@ -101,5 +106,5 @@ test("DELETE -> 'BASE_URL/:id', should return statusCode 204", async () => {
     .delete(`${BASE_URL}/${courseId}`)
 
   expect(res.statusCode).toBe(204)
-  await student.destroy()
+
 })
